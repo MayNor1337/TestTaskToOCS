@@ -11,4 +11,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <ProjectReference Include="..\CFPService.Domain.DependencyInjection\CFPService.Domain.DependencyInjection.csproj" />
+    <ProjectReference Include="..\CFPService.Domain\CFPService.Domain.csproj" />
+    <ProjectReference Include="..\CFPService.Infrastructure\CFPService.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

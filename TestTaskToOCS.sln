@@ -4,8 +4,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{03529A6B-B054-4B15-9D48-6A47387140A1}"
+	ProjectSection(SolutionItems) = preProject
+		src\docker-compose.yml = src\docker-compose.yml
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFPService.Api", "src\CFPService.Api\CFPService.Api.csproj", "{D1A811C1-D54A-4DEC-81C2-633CDE087657}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFPService.Domain", "src\CFPService.Domain\CFPService.Domain.csproj", "{C0F3AE77-2E45-4050-9D63-507F35A962BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFPService.Infrastructure", "src\CFPService.Infrastructure\CFPService.Infrastructure.csproj", "{7BF00F16-A414-4395-BE28-FA4FD8F44583}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFPService.Domain.DependencyInjection", "src\CFPService.Domain.DependencyInjection\CFPService.Domain.DependencyInjection.csproj", "{4FC05913-E4AA-4440-B4E4-D0D575DEADB9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,8 +29,23 @@ Global
 		{D1A811C1-D54A-4DEC-81C2-633CDE087657}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1A811C1-D54A-4DEC-81C2-633CDE087657}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1A811C1-D54A-4DEC-81C2-633CDE087657}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0F3AE77-2E45-4050-9D63-507F35A962BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0F3AE77-2E45-4050-9D63-507F35A962BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0F3AE77-2E45-4050-9D63-507F35A962BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0F3AE77-2E45-4050-9D63-507F35A962BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BF00F16-A414-4395-BE28-FA4FD8F44583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BF00F16-A414-4395-BE28-FA4FD8F44583}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BF00F16-A414-4395-BE28-FA4FD8F44583}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BF00F16-A414-4395-BE28-FA4FD8F44583}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FC05913-E4AA-4440-B4E4-D0D575DEADB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FC05913-E4AA-4440-B4E4-D0D575DEADB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FC05913-E4AA-4440-B4E4-D0D575DEADB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FC05913-E4AA-4440-B4E4-D0D575DEADB9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D1A811C1-D54A-4DEC-81C2-633CDE087657} = {03529A6B-B054-4B15-9D48-6A47387140A1}
+		{C0F3AE77-2E45-4050-9D63-507F35A962BA} = {03529A6B-B054-4B15-9D48-6A47387140A1}
+		{7BF00F16-A414-4395-BE28-FA4FD8F44583} = {03529A6B-B054-4B15-9D48-6A47387140A1}
+		{4FC05913-E4AA-4440-B4E4-D0D575DEADB9} = {03529A6B-B054-4B15-9D48-6A47387140A1}
 	EndGlobalSection
 EndGlobal

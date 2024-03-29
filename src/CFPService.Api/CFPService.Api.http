@@ -1,6 +1,0 @@
-@CFPService.Api_HostAddress = http://localhost:5187
-
-GET {{CFPService.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
