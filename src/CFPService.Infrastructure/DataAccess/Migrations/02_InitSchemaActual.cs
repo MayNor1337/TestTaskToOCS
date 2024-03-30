@@ -24,12 +24,12 @@ public class InitSchemaActual : Migration
         Create.Table("applications")
             .WithColumn("id").AsGuid().NotNullable().PrimaryKey()
             .WithColumn("author").AsGuid().NotNullable()
-            .WithColumn("activity").AsInt32()
-            .WithColumn("name").AsString(_applicationNameMaxSize)
-            .WithColumn("description").AsString(_applicationDescriptionMaxSize)
-            .WithColumn("outline").AsString(_applicationOutlineMaxSize)
+            .WithColumn("activity").AsInt32().Nullable()
+            .WithColumn("name").AsString(_applicationNameMaxSize).Nullable()
+            .WithColumn("description").AsString(_applicationDescriptionMaxSize).Nullable()
+            .WithColumn("outline").AsString(_applicationOutlineMaxSize).Nullable()
             .WithColumn("created_at").AsDateTime().WithDefaultValue(SystemMethods.CurrentUTCDateTime)
-            .WithColumn("status").AsCustom("status_enum").WithDefaultValue("draft");
+            .WithColumn("status").AsCustom("status_enum").WithDefaultValue("draft").Nullable();
         
         Create.Table("activities")
             .WithColumn("activity_id").AsInt32().NotNullable().PrimaryKey().Identity()

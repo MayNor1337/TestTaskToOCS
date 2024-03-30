@@ -1,6 +1,9 @@
-﻿using CFPService.Api.Naming;
+﻿using System.Net;
+using CFPService.Api.ActionFilters;
+using CFPService.Api.Naming;
 using CFPService.Domain.DependencyInjection;
 using CFPService.Infrastructure.Extensions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CFPService.Api;
 
@@ -16,15 +19,16 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddInfrastructure(_configuration)
-            .AddDomain();
-        services.AddMvc().AddJsonOptions(options =>
-        {
-            options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy();
-        });
-        services.AddControllers();
-        services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
-        services.AddHttpContextAccessor();
+            .AddDomain()
+            .AddMvc().AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy();
+                })
+            .AddMvcOptions(SetupAction).Services
+            .AddControllers().Services
+            .AddEndpointsApiExplorer()
+            .AddSwaggerGen()
+            .AddHttpContextAccessor();
     }
 
     public void Configure(
@@ -44,5 +48,13 @@ public class Startup
             endpoints.MapControllers();
             endpoints.MapDefaultControllerRoute();
         });
+    }
+    
+    void SetupAction(MvcOptions x)
+    {
+        x.Filters.Add(new ExceptionFilter());
+        x.Filters.Add(new ResponseTypeAttribute((int)HttpStatusCode.InternalServerError));
+        x.Filters.Add(new ResponseTypeAttribute((int)HttpStatusCode.BadRequest));
+        x.Filters.Add(new ProducesResponseTypeAttribute((int)HttpStatusCode.OK));
     }
 }

@@ -2,6 +2,7 @@
 using CFPService.Domain.Models;
 using CFPService.Domain.Separated.Repositories;
 using CFPService.Domain.Services.Interfaces;
+using CFPService.Domain.Validators;
 
 namespace CFPService.Domain.Services;
 
@@ -16,6 +17,9 @@ internal sealed class ApplicationService : IApplicationService
 
     public ApplicationEntity CreateApplication(ApplicationRequiredData applicationData)
     {
+        var validator = new ApplicationRequiredDataValidator();
+        validator.Validate(applicationData);
+
         return _applicationRepository.InsertApplication(applicationData).Result;
     }
 }

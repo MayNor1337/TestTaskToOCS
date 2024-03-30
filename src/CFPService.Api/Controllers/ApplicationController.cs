@@ -1,4 +1,5 @@
-﻿using CFPService.Api.Requests;
+﻿using CFPService.Api.ActionFilters;
+using CFPService.Api.Requests;
 using CFPService.Api.Responses;
 using CFPService.Domain.Models;
 using CFPService.Domain.Services.Interfaces;
@@ -8,6 +9,7 @@ namespace CFPService.Api.Controllers;
 
 [ApiController]
 [Route("/application")]
+[ExceptionFilter]
 public class ApplicationController : ControllerBase
 {
     private IApplicationService _applicationService;
