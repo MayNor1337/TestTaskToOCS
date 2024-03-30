@@ -1,4 +1,5 @@
-﻿using FluentMigrator.Runner;
+﻿using CFPService.Domain.Entity;
+using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Npgsql;
@@ -14,6 +15,8 @@ public static class Postgres
     {
         var mapper = NpgsqlConnection.GlobalTypeMapper;
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
+        mapper.MapComposite<ApplicationEntity>("applications_view", Translator);
     }
 
     public static void AddMigrations(IServiceCollection service)

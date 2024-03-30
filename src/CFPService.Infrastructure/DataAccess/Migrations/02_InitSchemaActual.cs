@@ -34,7 +34,7 @@ public class InitSchemaActual : Migration
                 a.id,
                 a.author,
                 act.activity,
-                a.name AS application_name,
+                a.name,
                 a.description,
                 a.outline,
                 a.created_at,
