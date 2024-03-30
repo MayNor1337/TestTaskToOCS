@@ -1,4 +1,5 @@
-﻿using CFPService.Infrastructure.Extensions;
+﻿using CFPService.Api.Naming;
+using CFPService.Infrastructure.Extensions;
 
 namespace CFPService.Api;
 
@@ -14,6 +15,10 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddInfrastructure(_configuration);
+        services.AddMvc().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy();
+        });
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();

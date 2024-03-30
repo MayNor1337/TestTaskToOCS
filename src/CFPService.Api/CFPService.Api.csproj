@@ -18,4 +18,6 @@
     <ProjectReference Include="..\CFPService.Infrastructure\CFPService.Infrastructure.csproj" />
   </ItemGroup>
 
+
+
 </Project>

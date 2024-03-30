@@ -5,13 +5,45 @@ using Microsoft.AspNetCore.Mvc;
 namespace CFPService.Api.Controllers;
 
 [ApiController]
-[Route("/[controller]")]
+[Route("/application")]
 public sealed class ApplicationController : ControllerBase
 {
-
     [HttpPost]
-    public CreateResponse Create(CreateRequest request)
+    public ApplicationResponse Create(CreateRequest request)
     {
-        return new CreateResponse();
+        return new ApplicationResponse(Guid.NewGuid(), request.Autor, request.Activity, request.Name,
+            request.Description, request.Outline);
+    }
+
+    [HttpPut]
+    public ApplicationResponse Edit(Guid applicationId)
+    {
+        return new ApplicationResponse(applicationId, applicationId, "", "", "", "");
+    }
+
+    [HttpDelete]
+    public void Delete(Guid applicationId)
+    {
+
+    }
+
+    [HttpPost("{applicationId}/submit")]
+    public void Submit(Guid applicationId)
+    {
+
+    }
+
+    [HttpGet]
+    public ApplicationResponse[] GetApplications(
+        [FromQuery(Name = "submittedAfter")] DateTime? submittedAfter,
+        [FromQuery(Name = "unsubmittedOlder")] DateTime? unsubmittedOlder)
+    {
+        return new ApplicationResponse[] { };
+    }
+
+    [HttpGet("{applicationId}")]
+    public ApplicationResponse GetApplication(Guid applicationId)
+    {
+        return new ApplicationResponse(applicationId, applicationId, "", "", "", "");
     }
 }
