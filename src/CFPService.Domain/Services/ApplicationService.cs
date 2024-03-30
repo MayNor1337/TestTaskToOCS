@@ -9,16 +9,17 @@ namespace CFPService.Domain.Services;
 internal sealed class ApplicationService : IApplicationService
 {
     private readonly IApplicationRepository _applicationRepository;
+    private readonly IApplicationDataValidator _dataValidator;
 
-    public ApplicationService(IApplicationRepository applicationRepository)
+    public ApplicationService(IApplicationRepository applicationRepository, IApplicationDataValidator dataValidator)
     {
         _applicationRepository = applicationRepository;
+        _dataValidator = dataValidator;
     }
 
-    public ApplicationEntity CreateApplication(ApplicationRequiredData applicationData)
+    public async Task<ApplicationEntity> CreateApplication(ApplicationRequiredData applicationData)
     {
-        var validator = new ApplicationRequiredDataValidator();
-        validator.Validate(applicationData);
+        await _dataValidator.Validate(applicationData);
 
         return _applicationRepository.InsertApplication(applicationData).Result;
     }

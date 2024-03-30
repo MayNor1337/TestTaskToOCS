@@ -1,5 +1,6 @@
 ﻿using CFPService.Domain.Services;
 using CFPService.Domain.Services.Interfaces;
+using CFPService.Domain.Validators;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CFPService.Domain.DependencyInjection;
@@ -10,7 +11,8 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddScoped<IActivitiesService, ActivitiesService>()
-            .AddScoped<IApplicationService, ApplicationService>();
+            .AddScoped<IApplicationService, ApplicationService>()
+            .AddScoped<IApplicationDataValidator, ApplicationDataValidator>();
         
         return services;
     }

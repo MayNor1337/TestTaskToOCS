@@ -20,9 +20,9 @@ public class ApplicationController : ControllerBase
     }
 
     [HttpPost]
-    public ApplicationResponse Create(CreateRequest request)
+    public async Task<ApplicationResponse> Create(CreateRequest request)
     {
-        var application= _applicationService.CreateApplication(
+        var application = await _applicationService.CreateApplication(
             new ApplicationRequiredData(
                 request.Autor,
                 request.Activity,
@@ -40,8 +40,8 @@ public class ApplicationController : ControllerBase
             );
     }
 
-    [HttpPut]
-    public ApplicationResponse Edit(Guid applicationId)
+    [HttpPut("{applicationId}")]
+    public ApplicationResponse Edit(Guid applicationId, EditRequest request)
     {
         return new ApplicationResponse(applicationId, applicationId, "", "", "", "");
     }

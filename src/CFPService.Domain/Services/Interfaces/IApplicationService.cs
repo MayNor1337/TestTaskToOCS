@@ -5,5 +5,5 @@ namespace CFPService.Domain.Services.Interfaces;
 
 public interface IApplicationService
 {
-    public ApplicationEntity CreateApplication(ApplicationRequiredData applicationData);
+    public Task<ApplicationEntity> CreateApplication(ApplicationRequiredData applicationData);
 }
