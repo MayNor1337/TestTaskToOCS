@@ -17,7 +17,9 @@ public static class ServiceCollectionExtensions
             config.GetSection(nameof(DataAccessOptions)).Bind(options);
         });
 
-        service.AddScoped<IActivitiesRepository, ActivitiesRepository>();
+        service
+            .AddScoped<IActivitiesRepository, ActivitiesRepository>()
+            .AddScoped<IApplicationRepository, ApplicationRepository>();
         
         Postgres.MapCompositeTypes();
         

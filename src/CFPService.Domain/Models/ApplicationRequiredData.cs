@@ -1,6 +1,6 @@
 ﻿namespace CFPService.Domain.Models;
 
-public record ApplicationModel(
+public record ApplicationRequiredData(
     Guid Author,
     string Activity,
     string Name,

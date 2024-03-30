@@ -8,7 +8,9 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDomain(this IServiceCollection services)
     {
-        services.AddScoped<IActivitiesService, ActivitiesService>();
+        services
+            .AddScoped<IActivitiesService, ActivitiesService>()
+            .AddScoped<IApplicationService, ApplicationService>();
         
         return services;
     }

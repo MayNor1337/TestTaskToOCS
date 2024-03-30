@@ -1,5 +1,7 @@
 ﻿using CFPService.Api.Requests;
 using CFPService.Api.Responses;
+using CFPService.Domain.Models;
+using CFPService.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CFPService.Api.Controllers;
@@ -8,11 +10,32 @@ namespace CFPService.Api.Controllers;
 [Route("/application")]
 public class ApplicationController : ControllerBase
 {
+    private IApplicationService _applicationService;
+
+    public ApplicationController(IApplicationService applicationService)
+    {
+        _applicationService = applicationService;
+    }
+
     [HttpPost]
     public ApplicationResponse Create(CreateRequest request)
     {
-        return new ApplicationResponse(Guid.NewGuid(), request.Autor, request.Activity, request.Name,
-            request.Description, request.Outline);
+        var application= _applicationService.CreateApplication(
+            new ApplicationRequiredData(
+                request.Autor,
+                request.Activity,
+                request.Name,
+                request.Description,
+                request.Outline));
+        
+        return new ApplicationResponse(
+            application.Id,
+            application.Author,
+            application.Activity,
+            application.Name,
+            application.Description,
+            application.Outline
+            );
     }
 
     [HttpPut]

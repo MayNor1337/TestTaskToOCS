@@ -29,7 +29,7 @@ public class InitSchemaActual : Migration
             .WithColumn("description").AsString(_applicationDescriptionMaxSize)
             .WithColumn("outline").AsString(_applicationOutlineMaxSize)
             .WithColumn("created_at").AsDateTime().WithDefaultValue(SystemMethods.CurrentUTCDateTime)
-            .WithColumn("status").AsCustom("status_enum");
+            .WithColumn("status").AsCustom("status_enum").WithDefaultValue("draft");
         
         Create.Table("activities")
             .WithColumn("activity_id").AsInt32().NotNullable().PrimaryKey().Identity()
