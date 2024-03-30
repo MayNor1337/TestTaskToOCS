@@ -1,10 +1,22 @@
 ﻿using FluentMigrator;
+using Microsoft.Extensions.Options;
 
 namespace CFPService.Infrastructure.DataAccess.Migrations;
 
 [Migration(2)]
 public class InitSchemaActual : Migration
 {
+    private readonly int _applicationNameMaxSize;
+    private readonly int _applicationDescriptionMaxSize;
+    private readonly int _applicationOutlineMaxSize;
+
+    public InitSchemaActual(IOptionsSnapshot<DataAccessOptions> options)
+    {
+        _applicationNameMaxSize = options.Value.ApplicationNameMaxSize;
+        _applicationDescriptionMaxSize = options.Value.ApplicationDescriptionMaxSize;
+        _applicationOutlineMaxSize = options.Value.ApplicationOutlineMaxSize;
+    }
+
     public override void Up()
     {
         Execute.Sql("CREATE TYPE status_enum AS ENUM ('draft', 'sent');");
@@ -13,9 +25,9 @@ public class InitSchemaActual : Migration
             .WithColumn("id").AsGuid().NotNullable().PrimaryKey()
             .WithColumn("author").AsGuid().NotNullable()
             .WithColumn("activity").AsInt32()
-            .WithColumn("name").AsString()
-            .WithColumn("description").AsString(int.MaxValue)
-            .WithColumn("outline").AsString(int.MaxValue)
+            .WithColumn("name").AsString(_applicationNameMaxSize)
+            .WithColumn("description").AsString(_applicationDescriptionMaxSize)
+            .WithColumn("outline").AsString(_applicationOutlineMaxSize)
             .WithColumn("created_at").AsDateTime().WithDefaultValue(SystemMethods.CurrentUTCDateTime)
             .WithColumn("status").AsCustom("status_enum");
         

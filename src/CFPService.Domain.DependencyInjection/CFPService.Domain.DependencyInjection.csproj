@@ -14,8 +14,4 @@
       <ProjectReference Include="..\CFPService.Domain\CFPService.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\CFPService.Domain\CFPService.Domain.csproj" />
-    </ItemGroup>
-
 </Project>
