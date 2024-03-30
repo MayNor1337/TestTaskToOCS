@@ -6,7 +6,7 @@ namespace CFPService.Api.Controllers;
 
 [ApiController]
 [Route("/application")]
-public sealed class ApplicationController : ControllerBase
+public class ApplicationController : ControllerBase
 {
     [HttpPost]
     public ApplicationResponse Create(CreateRequest request)
@@ -34,7 +34,7 @@ public sealed class ApplicationController : ControllerBase
     }
 
     [HttpGet]
-    public ApplicationResponse[] GetApplications(
+    public IEnumerable<ApplicationResponse> GetApplications(
         [FromQuery(Name = "submittedAfter")] DateTime? submittedAfter,
         [FromQuery(Name = "unsubmittedOlder")] DateTime? unsubmittedOlder)
     {

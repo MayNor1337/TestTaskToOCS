@@ -16,7 +16,9 @@ public static class Postgres
         var mapper = NpgsqlConnection.GlobalTypeMapper;
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
+        mapper.MapEnum<Statuses>("status_enum", Translator);
         mapper.MapComposite<ApplicationEntity>("applications_view", Translator);
+        mapper.MapComposite<ActivityEntity>("activities", Translator);
     }
 
     public static void AddMigrations(IServiceCollection service)

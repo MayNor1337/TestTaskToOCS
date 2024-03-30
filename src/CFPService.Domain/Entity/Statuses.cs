@@ -2,6 +2,6 @@
 
 public enum Statuses
 {
-    Draft = 1,
-    Sent = 2
+    Draft,
+    Sent
 }

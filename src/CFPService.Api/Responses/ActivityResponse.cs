@@ -1,3 +1,5 @@
 ﻿namespace CFPService.Api.Responses;
 
-public record ActivityResponse();
+public record ActivityResponse(
+    string Activity,
+    string Description);

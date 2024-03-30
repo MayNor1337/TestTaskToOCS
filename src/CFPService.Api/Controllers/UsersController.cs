@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CFPService.Api.Responses;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CFPService.Api.Controllers;
 
 [ApiController]
 [Route("/users")]
-public class UserController : ControllerBase
+public class UsersController : ControllerBase
 {
-    [HttpGet"{userId}"]
+    [HttpGet("{userId}/currentapplication")]
+    public ApplicationResponse GetCurrentApplication(Guid userId)
+    {
+        return new ApplicationResponse(userId, userId, "", "", "", "");
+    }
 }

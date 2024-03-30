@@ -1,4 +1,6 @@
-﻿using CFPService.Infrastructure.DataAccess;
+﻿using CFPService.Domain.Separated.Repositories;
+using CFPService.Infrastructure.DataAccess;
+using CFPService.Infrastructure.DataAccess.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +16,8 @@ public static class ServiceCollectionExtensions
         {
             config.GetSection(nameof(DataAccessOptions)).Bind(options);
         });
+
+        service.AddScoped<IActivitiesRepository, ActivitiesRepository>();
         
         Postgres.MapCompositeTypes();
         

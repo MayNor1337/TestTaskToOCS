@@ -24,6 +24,24 @@ public class InitSchemaActual : Migration
             .WithColumn("activity").AsString().NotNullable()
             .WithColumn("description").AsString().NotNullable();
         
+        Insert.IntoTable("activities").Row(new
+        {
+            activity = "Report",
+            description = "Доклад, 35-45 минут"
+        });
+
+        Insert.IntoTable("activities").Row(new
+        {
+            activity = "Masterclass",
+            description = "Мастеркласс, 1-2 часа"
+        });
+
+        Insert.IntoTable("activities").Row(new
+        {
+            activity = "Discussion",
+            description = "Дискуссия / круглый стол, 40-50 минут"
+        });
+        
         Create.ForeignKey()
             .FromTable("applications").ForeignColumn("activity")
             .ToTable("activities").PrimaryColumn("activity_id");

@@ -19,6 +19,8 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
       <PackageReference Include="Npgsql" Version="8.0.2" />
+
+
     </ItemGroup>
 
 

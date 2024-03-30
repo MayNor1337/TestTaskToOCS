@@ -1,6 +1,4 @@
-﻿using CFPService.Domain.Models;
-
-namespace CFPService.Api.Requests;
+﻿namespace CFPService.Api.Requests;
 
 public record CreateRequest(
     Guid Autor,
