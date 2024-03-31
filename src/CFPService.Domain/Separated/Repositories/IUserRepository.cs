@@ -4,5 +4,5 @@ namespace CFPService.Domain.Separated.Repositories;
 
 public interface IUserRepository
 {
-    Task<ApplicationEntity> GetNotSubmittedApplicationByAuthor(Guid authorId);
+    Task<ApplicationEntity?> GetNotSubmittedApplicationByAuthor(Guid authorId);
 }

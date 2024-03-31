@@ -41,6 +41,7 @@ internal sealed class ApplicationService : IApplicationService
         ApplicationData resultApplication = ResultApplication(newApplicationData, currentApplication);
 
         DataNullCheck(resultApplication);
+        await _validator.ValidateData(resultApplication);
 
         GetApplicationResult finalResult = await _applicationRepository.UpdateApplication(applicationId, resultApplication);
 
@@ -78,7 +79,7 @@ internal sealed class ApplicationService : IApplicationService
         GetApplicationResult findResult = await _applicationRepository.GetApplication(applicationId);
 
         if (findResult is not GetApplicationResult.ApplicationFound applicationFound)
-            throw new ValidationException("There is no such account");
+            throw new ValidationException("There is no such application");
 
         return applicationFound.Application;
     }

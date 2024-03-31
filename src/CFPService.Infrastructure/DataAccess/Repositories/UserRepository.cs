@@ -11,7 +11,7 @@ internal sealed class UserRepository : BaseRepository, IUserRepository
     {
     }
     
-    public async Task<ApplicationEntity> GetNotSubmittedApplicationByAuthor(Guid authorId)
+    public async Task<ApplicationEntity?> GetNotSubmittedApplicationByAuthor(Guid authorId)
     {
         const string sqlQuery = @"
 SELECT *
@@ -29,6 +29,10 @@ WHERE author = @author_id AND status = 'draft'";
                 sqlQuery,
                 sqlQueryParams));
 
-        return application.ToArray()[0];
+        var applicationEntities = application as ApplicationEntity[] ?? application.ToArray();
+        if (applicationEntities.Length is 0)
+            return null;
+        
+        return applicationEntities.ToArray()[0];
     }
 }

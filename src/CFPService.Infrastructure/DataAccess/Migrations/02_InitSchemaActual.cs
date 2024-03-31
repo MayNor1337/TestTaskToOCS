@@ -74,7 +74,7 @@ public class InitSchemaActual : Migration
                 a.submitted_date
             FROM
                 applications a
-            JOIN
+            LEFT JOIN
                 activities act ON a.activity = act.activity_id
         ");
 
