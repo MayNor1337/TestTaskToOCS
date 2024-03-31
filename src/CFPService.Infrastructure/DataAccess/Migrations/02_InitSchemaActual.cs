@@ -21,7 +21,7 @@ public class InitSchemaActual : Migration
     public override void Up()
     {
         Execute.Sql("CREATE TYPE status_enum AS ENUM ('draft', 'sent');");
-        
+
         Create.Table("applications")
             .WithColumn("id").AsGuid().NotNullable().PrimaryKey()
             .WithColumn("author").AsGuid().NotNullable()
@@ -30,7 +30,8 @@ public class InitSchemaActual : Migration
             .WithColumn("description").AsString(_applicationDescriptionMaxSize).Nullable()
             .WithColumn("outline").AsString(_applicationOutlineMaxSize).Nullable()
             .WithColumn("created_at").AsDateTime().WithDefaultValue(SystemMethods.CurrentUTCDateTime)
-            .WithColumn("status").AsCustom("status_enum").WithDefaultValue("draft").Nullable();
+            .WithColumn("status").AsCustom("status_enum").WithDefaultValue("draft").Nullable()
+            .WithColumn("submitted_date").AsDateTime().Nullable();
         
         Create.Table("activities")
             .WithColumn("activity_id").AsInt32().NotNullable().PrimaryKey().Identity()
@@ -69,7 +70,8 @@ public class InitSchemaActual : Migration
                 a.description,
                 a.outline,
                 a.created_at,
-                a.status
+                a.status,
+                a.submitted_date
             FROM
                 applications a
             JOIN

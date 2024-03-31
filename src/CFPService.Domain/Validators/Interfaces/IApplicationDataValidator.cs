@@ -1,6 +1,6 @@
 ﻿using CFPService.Domain.Models;
 
-namespace CFPService.Domain.Validators;
+namespace CFPService.Domain.Validators.Interfaces;
 
 public interface IApplicationDataValidator
 {

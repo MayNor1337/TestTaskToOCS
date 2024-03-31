@@ -2,6 +2,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using CFPService.Domain.Exceptions;
 
 namespace CFPService.Api.ActionFilters;
 
@@ -12,6 +13,9 @@ internal sealed class ExceptionFilter : Attribute, IExceptionFilter
         switch (context.Exception)
         {
             case ValidationException exception:
+                HandleBadRequest(context, exception);
+                return;
+            case SearchException exception:
                 HandleBadRequest(context, exception);
                 return;
             default:
@@ -33,7 +37,7 @@ internal sealed class ExceptionFilter : Attribute, IExceptionFilter
         context.Result = actionResult;
     }
     
-    private static void HandleBadRequest(ExceptionContext context, ValidationException exception)
+    private static void HandleBadRequest(ExceptionContext context, Exception exception)
     {
         var contextResult = new JsonResult(
             new ErrorResponse

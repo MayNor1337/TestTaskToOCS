@@ -3,6 +3,7 @@ using CFPService.Domain.Separated.Repositories;
 using CFPService.Domain.Services;
 using CFPService.Domain.Services.Interfaces;
 using CFPService.Domain.Validators;
+using CFPService.Domain.Validators.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -18,6 +19,8 @@ public static class ServiceCollectionExtensions
         services
             .AddScoped<IActivitiesService, ActivitiesService>()
             .AddScoped<IApplicationService, ApplicationService>()
+            .AddScoped<IUserService, UserService>()
+            .AddScoped<IApplicationValidator, NewApplicationValidator>()
             .Configure<ApplicationOptions>(options =>
             {
                 config.GetSection(nameof(ApplicationOptions)).Bind(options);

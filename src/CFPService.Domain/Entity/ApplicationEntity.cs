@@ -8,5 +8,6 @@ public record ApplicationEntity(
     string? Description,
     string? Outline,
     DateTime? CreatedAt,
-    Statuses? Status
+    Statuses? Status,
+    DateTime? SubmittedDate
     );

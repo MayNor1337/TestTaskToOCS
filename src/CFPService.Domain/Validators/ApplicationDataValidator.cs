@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using CFPService.Domain.Models;
 using CFPService.Domain.Separated.Repositories;
+using CFPService.Domain.Validators.Interfaces;
 
 namespace CFPService.Domain.Validators;
 

@@ -1,7 +1,6 @@
 ﻿using CFPService.Api.ActionFilters;
 using CFPService.Api.Requests;
 using CFPService.Api.Responses;
-using CFPService.Domain.Entity;
 using CFPService.Domain.Models;
 using CFPService.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -68,22 +67,39 @@ public class ApplicationController : ControllerBase
     }
 
     [HttpPost("{applicationId}/submit")]
-    public void Submit(Guid applicationId)
+    public async Task Submit(Guid applicationId)
     {
-
+        await _applicationService.SubmitApplication(applicationId);
     }
 
     [HttpGet]
-    public IEnumerable<ApplicationResponse> GetApplications(
+    public async Task<IEnumerable<ApplicationResponse>> GetApplications(
         [FromQuery(Name = "submittedAfter")] DateTime? submittedAfter,
         [FromQuery(Name = "unsubmittedOlder")] DateTime? unsubmittedOlder)
     {
-        return new ApplicationResponse[] { };
+        var applications = await _applicationService.GetApplicationByDate(submittedAfter, unsubmittedOlder);
+        return applications.Select(x =>
+        {
+            return new ApplicationResponse(
+                x.Id,
+                x.Author,
+                x.Activity,
+                x.Name,
+                x.Description,
+                x.Outline);
+        }).ToArray();
     }
 
     [HttpGet("{applicationId}")]
-    public ApplicationResponse GetApplication(Guid applicationId)
+    public async Task<ApplicationResponse> GetApplication(Guid applicationId)
     {
-        return new ApplicationResponse(applicationId, applicationId, "", "", "", "");
+        var application = await _applicationService.GetApplication(applicationId);
+        return new ApplicationResponse(
+            application.Id,
+            application.Author,
+            application.Activity,
+            application.Name,
+            application.Description,
+            application.Outline);
     }
 }

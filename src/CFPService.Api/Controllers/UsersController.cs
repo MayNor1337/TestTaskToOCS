@@ -1,4 +1,5 @@
 ﻿using CFPService.Api.Responses;
+using CFPService.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CFPService.Api.Controllers;
@@ -7,9 +8,23 @@ namespace CFPService.Api.Controllers;
 [Route("/users")]
 public class UsersController : ControllerBase
 {
-    [HttpGet("{userId}/currentapplication")]
-    public ApplicationResponse GetCurrentApplication(Guid userId)
+    private IUserService _userService;
+
+    public UsersController(IUserService userService)
     {
-        return new ApplicationResponse(userId, userId, "", "", "", "");
+        _userService = userService;
+    }
+
+    [HttpGet("{userId}/currentapplication")]
+    public async Task<ApplicationResponse> GetCurrentApplication(Guid userId)
+    {
+        var application = await _userService.GetCurrentNotSubmittedApplication(userId);
+        return new ApplicationResponse(
+            application.Id,
+            application.Author,
+            application.Activity,
+            application.Name,
+            application.Description,
+            application.Outline);
     }
 }

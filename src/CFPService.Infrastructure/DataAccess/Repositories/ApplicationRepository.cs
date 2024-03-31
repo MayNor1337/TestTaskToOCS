@@ -77,9 +77,23 @@ WHERE applications.id = @application_id";
         return await GetApplication(applicationId);
     }
 
-    public Task SetSentStatus(Guid applicationId)
+    public async Task SetSentStatus(Guid applicationId)
     {
-        throw new NotImplementedException();
+        const string sqlQuery = @"
+UPDATE applications
+SET status = 'sent', submitted_date = CURRENT_TIMESTAMP
+WHERE id = @application_id";
+        
+        var sqlQueryParams = new
+        {
+            application_id = applicationId
+        };
+        
+        await using var connection = await GetAndOpenConnection();
+        await connection.QueryAsync(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams));
     }
 
     public async Task Delete(Guid applicationId)
@@ -123,5 +137,32 @@ WHERE applications_view.id = @application_id";
             return new GetApplicationResult.ApplicationNotFound();
 
         return new GetApplicationResult.ApplicationFound(applicationEntities.ToArray()[0]);
+    }
+
+    public async Task<IEnumerable<ApplicationEntity>> GetApplicationsByDate(DateTime? submittedAfterDate = null, DateTime? unsubmittedOlderDate = null)
+    {
+        string sqlQuery = @"
+SELECT *
+FROM applications_view
+WHERE ";
+        if (submittedAfterDate.HasValue)
+        {
+            sqlQuery += "submitted_date > @SubmittedAfterDate";
+        }
+        else
+        {
+            sqlQuery += "status = 'draft' AND created_at < @UnsubmittedOlderDate";
+        }
+        
+        var sqlQueryParams = new
+        {
+            SubmittedAfterDate = submittedAfterDate,
+            UnsubmittedOlderDate = unsubmittedOlderDate
+        };
+
+        await using var connection = await GetAndOpenConnection();
+        var applications = await connection.QueryAsync<ApplicationEntity>(sqlQuery, sqlQueryParams);
+    
+        return applications.ToArray();
     }
 }

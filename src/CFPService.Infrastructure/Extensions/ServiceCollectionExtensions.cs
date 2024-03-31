@@ -19,7 +19,8 @@ public static class ServiceCollectionExtensions
 
         service
             .AddScoped<IActivitiesRepository, ActivitiesRepository>()
-            .AddScoped<IApplicationRepository, ApplicationRepository>();
+            .AddScoped<IApplicationRepository, ApplicationRepository>()
+            .AddScoped<IUserRepository, UserRepository>();
         
         Postgres.MapCompositeTypes();
         
