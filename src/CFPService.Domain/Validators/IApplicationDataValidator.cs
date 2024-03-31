@@ -4,5 +4,5 @@ namespace CFPService.Domain.Validators;
 
 public interface IApplicationDataValidator
 {
-    public Task Validate(ApplicationRequiredData data);
+    public Task Validate(ApplicationData data);
 }

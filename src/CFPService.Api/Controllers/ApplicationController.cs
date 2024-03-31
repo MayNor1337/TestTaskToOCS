@@ -1,6 +1,7 @@
 ﻿using CFPService.Api.ActionFilters;
 using CFPService.Api.Requests;
 using CFPService.Api.Responses;
+using CFPService.Domain.Entity;
 using CFPService.Domain.Models;
 using CFPService.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -23,8 +24,8 @@ public class ApplicationController : ControllerBase
     public async Task<ApplicationResponse> Create(CreateRequest request)
     {
         var application = await _applicationService.CreateApplication(
-            new ApplicationRequiredData(
-                request.Autor,
+            request.Autor,
+            new ApplicationData(
                 request.Activity,
                 request.Name,
                 request.Description,
@@ -41,15 +42,29 @@ public class ApplicationController : ControllerBase
     }
 
     [HttpPut("{applicationId}")]
-    public ApplicationResponse Edit(Guid applicationId, EditRequest request)
+    public async Task<ApplicationResponse> Edit(Guid applicationId, EditRequest request)
     {
-        return new ApplicationResponse(applicationId, applicationId, "", "", "", "");
+        var applicationEntity = await _applicationService.EditApplication(
+            applicationId,
+            new ApplicationData(
+                request.Activity,
+                request.Name,
+                request.Description,
+                request.Outline));
+
+        return new ApplicationResponse(
+            applicationEntity.Id,
+            applicationEntity.Author,
+            applicationEntity.Activity,
+            applicationEntity.Name,
+            applicationEntity.Description,
+            applicationEntity.Outline);
     }
 
     [HttpDelete]
-    public void Delete(Guid applicationId)
+    public async Task Delete(Guid applicationId)
     {
-
+        await _applicationService.DeleteApplication(applicationId);
     }
 
     [HttpPost("{applicationId}/submit")]

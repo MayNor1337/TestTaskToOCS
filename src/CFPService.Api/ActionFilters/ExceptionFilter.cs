@@ -29,7 +29,7 @@ internal sealed class ExceptionFilter : Attribute, IExceptionFilter
                 "An error has occurred. We are already fixing it"
             ));
 
-        actionResult.StatusCode = (int?)HttpStatusCode.InternalServerError;
+        actionResult.StatusCode = (int)HttpStatusCode.InternalServerError;
         context.Result = actionResult;
     }
     

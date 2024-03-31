@@ -1,4 +1,5 @@
-﻿using FluentMigrator;
+﻿using CFPService.Domain.Models;
+using FluentMigrator;
 using Microsoft.Extensions.Options;
 
 namespace CFPService.Infrastructure.DataAccess.Migrations;
@@ -10,7 +11,7 @@ public class InitSchemaActual : Migration
     private readonly int _applicationDescriptionMaxSize;
     private readonly int _applicationOutlineMaxSize;
 
-    public InitSchemaActual(IOptionsSnapshot<DataAccessOptions> options)
+    public InitSchemaActual(IOptionsSnapshot<ApplicationOptions> options)
     {
         _applicationNameMaxSize = options.Value.ApplicationNameMaxSize;
         _applicationDescriptionMaxSize = options.Value.ApplicationDescriptionMaxSize;

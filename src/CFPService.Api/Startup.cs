@@ -19,7 +19,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddInfrastructure(_configuration)
-            .AddDomain()
+            .AddDomain(_configuration)
             .AddMvc().AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy();
