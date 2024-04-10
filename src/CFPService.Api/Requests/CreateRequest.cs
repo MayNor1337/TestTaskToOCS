@@ -1,7 +1,7 @@
 ﻿namespace CFPService.Api.Requests;
 
 public record CreateRequest(
-    Guid Autor,
+    Guid Author,
     string? Activity,
     string? Name,
     string? Description,

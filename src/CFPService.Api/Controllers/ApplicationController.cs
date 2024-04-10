@@ -23,7 +23,7 @@ public class ApplicationController : ControllerBase
     public async Task<ApplicationResponse> Create(CreateRequest request)
     {
         var application = await _applicationService.CreateApplication(
-            request.Autor,
+            request.Author,
             new ApplicationData(
                 request.Activity,
                 request.Name,
@@ -60,7 +60,7 @@ public class ApplicationController : ControllerBase
             applicationEntity.Outline);
     }
 
-    [HttpDelete]
+    [HttpDelete("/application/{applicationId}")]
     public async Task Delete(Guid applicationId)
     {
         await _applicationService.DeleteApplication(applicationId);

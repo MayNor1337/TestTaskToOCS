@@ -15,4 +15,5 @@
     <ProjectReference Include="..\CFPService.Domain.DependencyInjection\CFPService.Domain.DependencyInjection.csproj" />
     <ProjectReference Include="..\CFPService.Infrastructure\CFPService.Infrastructure.csproj" />
   </ItemGroup>
+
 </Project>
