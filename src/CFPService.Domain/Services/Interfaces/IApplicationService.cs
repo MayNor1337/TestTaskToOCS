@@ -15,7 +15,6 @@ public interface IApplicationService
 
     public Task<ApplicationEntity> GetApplication(Guid applicationId);
 
-    public Task<IEnumerable<ApplicationEntity>> GetApplicationByDate(
-        DateTime? submittedAfter,
+    public Task<IEnumerable<ApplicationEntity>> GetApplicationByDate(DateTime? submittedAfter,
         DateTime? unsubmittedOlder);
 }

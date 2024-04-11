@@ -5,9 +5,9 @@ using FluentValidation;
 
 namespace CFPService.Api.Validators;
 
-internal sealed class SubmitApplicationValidator : AbstractValidator<SubmitValidatonModel>
+internal sealed class SubmitValidator : AbstractValidator<SubmitValidatonModel>
 {
-    public SubmitApplicationValidator(IApplicationRepository applicationRepository)
+    public SubmitValidator(IApplicationRepository applicationRepository)
     {
         RuleFor(x => x.ApplicationId)
             .MustAsync(async (id, cancellation) =>

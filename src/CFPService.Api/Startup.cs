@@ -67,6 +67,8 @@ public class Startup
         services
             .AddScoped<IValidator<CreateRequest>, CreateApplicationValidator>()
             .AddScoped<IValidator<EditValidatonModel>, EditApplicationValidator>()
-            .AddScoped<IValidator<GetApplicationByDateRequest>, GetApplicationByDateValidator>();
+            .AddScoped<IValidator<GetApplicationByDateRequest>, GetApplicationByDateValidator>()
+            .AddScoped<IValidator<DeleteValidationModel>, DeleteValidation>()
+            .AddScoped<IValidator<SubmitValidatonModel>, SubmitValidator>();
     }
 }

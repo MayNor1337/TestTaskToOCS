@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using CFPService.Domain.Entity;
+﻿using CFPService.Domain.Entity;
 using CFPService.Domain.Exceptions;
 using CFPService.Domain.Models;
 using CFPService.Domain.Separated.Repositories;
@@ -29,15 +28,20 @@ internal sealed class ApplicationService : IApplicationService
 
     public async Task<ApplicationEntity> EditApplication(Guid applicationId, ApplicationData newApplicationData)
     {
-        // TODO
-        // var currentApplication = await GetApplication(applicationId);
-        //
-        // var resultApplication = currentApplication.UpdateData(newApplicationData);
-        //
-        // GetApplicationResult finalResult = await _applicationRepository.UpdateApplication(applicationId, resultApplication);
-        //
-        // if (finalResult is GetApplicationResult.ApplicationFound applicationFoundFinal)
-        //     return applicationFoundFinal.Application;
+        var currentApplication = await GetApplication(applicationId);
+        
+        var resultApplication = currentApplication.UpdateData(newApplicationData);
+        
+        GetApplicationResult finalResult = await _applicationRepository.UpdateApplication(applicationId, 
+            new ApplicationData(
+                resultApplication.Activity,
+                resultApplication.Name,
+                resultApplication.Description,
+                resultApplication.Outline
+                ));
+        
+        if (finalResult is GetApplicationResult.ApplicationFound applicationFoundFinal)
+            return applicationFoundFinal.Application;
 
         throw new OperationException();
     }
@@ -68,9 +72,9 @@ internal sealed class ApplicationService : IApplicationService
     {
         if (submittedAfter is not null)
         {
-            return await _applicationRepository.GetApplicationsByDate(submittedAfter);
+            return await _applicationRepository.GetApplicationsByDateSubmittedAfterDate((DateTime)submittedAfter);
         }
         
-        return await _applicationRepository.GetApplicationsByDate(null, unsubmittedOlder);
+        return await _applicationRepository.GetApplicationsByDateUnsubmittedOlderDate((DateTime)unsubmittedOlder);
     }
 }
