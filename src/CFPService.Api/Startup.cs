@@ -1,8 +1,12 @@
 ﻿using System.Net;
 using CFPService.Api.ActionFilters;
 using CFPService.Api.Naming;
+using CFPService.Api.Requests;
+using CFPService.Api.ValidationModels;
+using CFPService.Api.Validators;
 using CFPService.Domain.DependencyInjection;
 using CFPService.Infrastructure.Extensions;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CFPService.Api;
@@ -56,5 +60,13 @@ public class Startup
         x.Filters.Add(new ResponseTypeAttribute((int)HttpStatusCode.InternalServerError));
         x.Filters.Add(new ResponseTypeAttribute((int)HttpStatusCode.BadRequest));
         x.Filters.Add(new ProducesResponseTypeAttribute((int)HttpStatusCode.OK));
+    }
+
+    void AddValidators(IServiceCollection services)
+    {
+        services
+            .AddScoped<IValidator<CreateRequest>, CreateApplicationValidator>()
+            .AddScoped<IValidator<EditValidatonModel>, EditApplicationValidator>()
+            .AddScoped<IValidator<GetApplicationByDateRequest>, GetApplicationByDateValidator>();
     }
 }

@@ -1,24 +1,14 @@
-﻿using CFPService.Domain.Entity;
-using FluentMigrator.Runner;
+﻿using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Npgsql;
-using Npgsql.NameTranslation;
 
 namespace CFPService.Infrastructure.DataAccess;
 
 public static class Postgres
 {
-    private static readonly INpgsqlNameTranslator Translator = new NpgsqlSnakeCaseNameTranslator();
-
     public static void MapCompositeTypes()
     {
-        var mapper = NpgsqlConnection.GlobalTypeMapper;
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
-
-        mapper.MapEnum<Statuses>("status_enum", Translator);
-        mapper.MapComposite<ApplicationEntity>("applications_view", Translator);
-        mapper.MapComposite<ActivityEntity>("activities", Translator);
     }
 
     public static void AddMigrations(IServiceCollection service)
