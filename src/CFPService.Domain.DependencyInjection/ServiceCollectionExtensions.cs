@@ -3,6 +3,7 @@ using CFPService.Domain.Services;
 using CFPService.Domain.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace CFPService.Domain.DependencyInjection;
 
@@ -16,10 +17,11 @@ public static class ServiceCollectionExtensions
             .AddScoped<IActivitiesService, ActivitiesService>()
             .AddScoped<IApplicationService, ApplicationService>()
             .AddScoped<IUserService, UserService>()
-            .Configure<ApplicationOptions>(options =>
-            {
-                config.GetSection(nameof(ApplicationOptions)).Bind(options);
-            });
+            .AddOptions<IOptionsSnapshot<ApplicationOptions>>();
+            // .Configure<ApplicationOptions>(options =>
+            // {
+            //     config.GetSection(nameof(ApplicationOptions)).Bind(options);
+            // });
         
         return services;
     }

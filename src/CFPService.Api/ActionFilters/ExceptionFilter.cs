@@ -1,8 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Net;
+﻿using System.Net;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using CFPService.Domain.Exceptions;
 
 namespace CFPService.Api.ActionFilters;
 
@@ -13,9 +12,6 @@ internal sealed class ExceptionFilter : Attribute, IExceptionFilter
         switch (context.Exception)
         {
             case ValidationException exception:
-                HandleBadRequest(context, exception);
-                return;
-            case SearchException exception:
                 HandleBadRequest(context, exception);
                 return;
             default:

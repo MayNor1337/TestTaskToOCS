@@ -1,10 +1,10 @@
-﻿using CFPService.Api.Requests;
-using CFPService.Api.ValidationModels;
+﻿using CFPService.Api.ValidationModels;
 using CFPService.Domain.Entity;
 using CFPService.Domain.Models;
 using CFPService.Domain.Separated.Repositories;
 using CFPService.Domain.Separated.Results;
 using FluentValidation;
+using Microsoft.Extensions.Options;
 
 namespace CFPService.Api.Validators;
 
@@ -12,9 +12,16 @@ public sealed class EditApplicationValidator : AbstractValidator<EditValidatonMo
 {
     private readonly IApplicationRepository _applicationRepository;
 
-    public EditApplicationValidator(IApplicationRepository applicationRepository, ApplicationOptions options, IActivitiesRepository activitiesRepository)
+    public EditApplicationValidator(
+        IApplicationRepository applicationRepository,
+        IOptionsSnapshot<ApplicationOptions>  options,
+        IActivitiesRepository activitiesRepository)
     {
         _applicationRepository = applicationRepository;
+
+        RuleFor(x => x.ApplicationId)
+            .Must(id => id != Guid.Empty)
+            .WithMessage("ID cannot be empty");
 
         RuleFor(x => new ApplicationData(
                 x.Request.Activity, 
@@ -53,7 +60,7 @@ public sealed class EditApplicationValidator : AbstractValidator<EditValidatonMo
             {
                 GetApplicationResult result = await _applicationRepository.GetApplication(applicationId);
 
-                return result is GetApplicationResult.ApplicationFound;
+                return result is GetApplicationResult.ApplicationNotFound;
             })
             .WithMessage("There is no such application")
             .MustAsync(async (applicationId, cancellation) =>

@@ -5,6 +5,7 @@ using CFPService.Api.Requests;
 using CFPService.Api.ValidationModels;
 using CFPService.Api.Validators;
 using CFPService.Domain.DependencyInjection;
+using CFPService.Domain.Models;
 using CFPService.Infrastructure.Extensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +34,8 @@ public class Startup
             .AddEndpointsApiExplorer()
             .AddSwaggerGen()
             .AddHttpContextAccessor();
+
+        AddValidators(services);
     }
 
     public void Configure(
@@ -66,9 +69,11 @@ public class Startup
     {
         services
             .AddScoped<IValidator<CreateRequest>, CreateApplicationValidator>()
+            .AddScoped<IValidator<ApplicationData>, DataApplicationValidator>()
             .AddScoped<IValidator<EditValidatonModel>, EditApplicationValidator>()
             .AddScoped<IValidator<GetApplicationByDateRequest>, GetApplicationByDateValidator>()
             .AddScoped<IValidator<DeleteValidationModel>, DeleteValidation>()
-            .AddScoped<IValidator<SubmitValidatonModel>, SubmitValidator>();
+            .AddScoped<IValidator<SubmitValidatonModel>, SubmitValidator>()
+            .AddScoped<IValidator<GetApplicationByIdModel>, GetApplicationByIdValidator>();
     }
 }

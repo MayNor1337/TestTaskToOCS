@@ -19,6 +19,7 @@ public class ApplicationController : ControllerBase
     private readonly IValidator<EditValidatonModel> _editApplicationValidator;
     private readonly IValidator<GetApplicationByDateRequest> _getByDateValidator;
     private readonly IValidator<DeleteValidationModel> _deleteValidator;
+    private readonly IValidator<GetApplicationByIdModel> _getByIdValidator;
     private readonly IValidator<SubmitValidatonModel> _submitValidator;
 
     public ApplicationController(
@@ -26,7 +27,7 @@ public class ApplicationController : ControllerBase
         IValidator<CreateRequest> createApplicationValidator, 
         IValidator<EditValidatonModel> editApplicationValidator, 
         IValidator<GetApplicationByDateRequest> getByDateValidator, 
-        IValidator<DeleteValidationModel> deleteValidator, IValidator<SubmitValidatonModel> submitValidator)
+        IValidator<DeleteValidationModel> deleteValidator, IValidator<SubmitValidatonModel> submitValidator, IValidator<GetApplicationByIdModel> getByIdValidator)
     {
         _applicationService = applicationService;
         _createApplicationValidator = createApplicationValidator;
@@ -34,12 +35,13 @@ public class ApplicationController : ControllerBase
         _getByDateValidator = getByDateValidator;
         _deleteValidator = deleteValidator;
         _submitValidator = submitValidator;
+        _getByIdValidator = getByIdValidator;
     }
 
     [HttpPost]
     public async Task<ApplicationResponse> Create(CreateRequest request)
     {
-        await _createApplicationValidator.ValidateAsync(request);
+        await _createApplicationValidator.ValidateAndThrowAsync(request);
 
         var application = await _applicationService.CreateApplication(
             request.Author,
@@ -62,7 +64,7 @@ public class ApplicationController : ControllerBase
     [HttpPut("{applicationId}")]
     public async Task<ApplicationResponse> Edit(Guid applicationId, EditRequest request)
     {
-        await _editApplicationValidator.ValidateAsync(new EditValidatonModel(applicationId, request));
+        await _editApplicationValidator.ValidateAndThrowAsync(new EditValidatonModel(applicationId, request));
 
         var applicationEntity = await _applicationService.EditApplication(
             applicationId,
@@ -84,7 +86,7 @@ public class ApplicationController : ControllerBase
     [HttpDelete("/application/{applicationId}")]
     public async Task Delete(Guid applicationId)
     {
-        await _deleteValidator.ValidateAsync(new DeleteValidationModel(applicationId));
+        await _deleteValidator.ValidateAndThrowAsync(new DeleteValidationModel(applicationId));
 
         await _applicationService.DeleteApplication(applicationId);
     }
@@ -92,7 +94,7 @@ public class ApplicationController : ControllerBase
     [HttpPost("{applicationId}/submit")]
     public async Task Submit(Guid applicationId)
     {
-        await _submitValidator.ValidateAsync(new SubmitValidatonModel(applicationId));
+        await _submitValidator.ValidateAndThrowAsync(new SubmitValidatonModel(applicationId));
 
         await _applicationService.SubmitApplication(applicationId);
     }
@@ -102,7 +104,7 @@ public class ApplicationController : ControllerBase
         [FromQuery(Name = "submittedAfter")] DateTime? submittedAfter,
         [FromQuery(Name = "unsubmittedOlder")] DateTime? unsubmittedOlder)
     {
-        await _getByDateValidator.ValidateAsync(new GetApplicationByDateRequest(submittedAfter, unsubmittedOlder));
+        await _getByDateValidator.ValidateAndThrowAsync(new GetApplicationByDateRequest(submittedAfter, unsubmittedOlder));
         
         var applications = await _applicationService.GetApplicationByDate(submittedAfter, unsubmittedOlder);
 
@@ -120,6 +122,8 @@ public class ApplicationController : ControllerBase
     [HttpGet("{applicationId}")]
     public async Task<ApplicationResponse> GetApplication(Guid applicationId)
     {
+        await _getByIdValidator.ValidateAndThrowAsync(new GetApplicationByIdModel(applicationId));
+        
         var application = await _applicationService.GetApplication(applicationId);
         return new ApplicationResponse(
             application.Id,

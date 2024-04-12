@@ -60,10 +60,10 @@ internal sealed class ApplicationService : IApplicationService
     {
         GetApplicationResult findResult = await _applicationRepository.GetApplication(applicationId);
 
-        if (findResult is not GetApplicationResult.ApplicationFound applicationFound)
-            throw new OperationException();
+        if (findResult is GetApplicationResult.ApplicationFound applicationFound)
+            return applicationFound.Application;
 
-        return applicationFound.Application;
+        throw new OperationException();
     }
 
     public async Task<IEnumerable<ApplicationEntity>> GetApplicationByDate(

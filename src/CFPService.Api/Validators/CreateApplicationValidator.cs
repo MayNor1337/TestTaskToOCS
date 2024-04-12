@@ -2,6 +2,7 @@
 using CFPService.Domain.Models;
 using CFPService.Domain.Separated.Repositories;
 using FluentValidation;
+using Microsoft.Extensions.Options;
 
 namespace CFPService.Api.Validators;
 
@@ -10,7 +11,7 @@ public sealed class CreateApplicationValidator : AbstractValidator<CreateRequest
     private readonly IUserRepository _userRepository;
 
     public CreateApplicationValidator(
-        ApplicationOptions options, 
+        IOptionsSnapshot<ApplicationOptions>  options, 
         IUserRepository userRepository, 
         IActivitiesRepository activitiesRepository)
     {

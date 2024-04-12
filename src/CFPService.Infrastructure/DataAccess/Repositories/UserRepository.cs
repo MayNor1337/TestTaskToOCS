@@ -2,15 +2,19 @@
 using CFPService.Domain.Separated.Repositories;
 using Dapper;
 using Microsoft.Extensions.Options;
+using Npgsql;
 
 namespace CFPService.Infrastructure.DataAccess.Repositories;
 
-internal sealed class UserRepository : BaseRepository, IUserRepository
+internal sealed class UserRepository : IUserRepository
 {
-    public UserRepository(IOptionsSnapshot<DataAccessOptions> options) : base(options)
+    private readonly IOptionsSnapshot<DataAccessOptions> _options;
+
+    public UserRepository(IOptionsSnapshot<DataAccessOptions> options)
     {
+        _options = options;
     }
-    
+
     public async Task<ApplicationEntity?> GetNotSubmittedApplicationByAuthor(Guid authorId)
     {
         const string sqlQuery = @"
@@ -34,5 +38,13 @@ WHERE author = @author_id AND status = 'draft'";
             return null;
         
         return applicationEntities.ToArray()[0];
+    }
+    
+    async Task<NpgsqlConnection> GetAndOpenConnection()
+    {
+        var connection = new NpgsqlConnection(_options.Value.ConnectionString);
+        await connection.OpenAsync();
+        await connection.ReloadTypesAsync();
+        return connection;
     }
 }

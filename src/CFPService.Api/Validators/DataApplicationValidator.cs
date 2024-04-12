@@ -1,6 +1,7 @@
 ﻿using CFPService.Domain.Models;
 using CFPService.Domain.Separated.Repositories;
 using FluentValidation;
+using Microsoft.Extensions.Options;
 
 namespace CFPService.Api.Validators;
 
@@ -8,12 +9,12 @@ public sealed class DataApplicationValidator : AbstractValidator<ApplicationData
 {
     private readonly IActivitiesRepository _activitiesRepository;
 
-    public DataApplicationValidator(ApplicationOptions options, IActivitiesRepository activitiesRepository)
+    public DataApplicationValidator(IOptionsSnapshot<ApplicationOptions> options, IActivitiesRepository activitiesRepository)
     {
         _activitiesRepository = activitiesRepository;
-        var applicationNameMaxSize = options.ApplicationOutlineMaxSize;
-        var applicationDescriptionMaxSize = options.ApplicationDescriptionMaxSize;
-        var applicationOutlineMaxSize = options.ApplicationNameMaxSize;
+        var applicationNameMaxSize = options.Value.ApplicationOutlineMaxSize;
+        var applicationDescriptionMaxSize = options.Value.ApplicationDescriptionMaxSize;
+        var applicationOutlineMaxSize = options.Value.ApplicationNameMaxSize;
 
         LengthRule(applicationNameMaxSize, applicationDescriptionMaxSize, applicationOutlineMaxSize);
         ActivityCheck();
@@ -37,14 +38,12 @@ public sealed class DataApplicationValidator : AbstractValidator<ApplicationData
         RuleFor(x => x.Name)
             .Must(x => x == null || x.Length <= applicationNameMaxSize)
             .When(x => x.Name != null)
-            .WithMessage($"The title cannot exceed {applicationNameMaxSize} characters in length");
+            .WithMessage($"The title cannot exceed {applicationNameMaxSize} characters in length")
 
-        RuleFor(x => x.Description)
             .Must(x => x == null || x.Length <= applicationDescriptionMaxSize)
             .When(x => x.Description != null)
-            .WithMessage($"The description cannot exceed {applicationDescriptionMaxSize} characters in length");
+            .WithMessage($"The description cannot exceed {applicationDescriptionMaxSize} characters in length")
 
-        RuleFor(x => x.Outline)
             .Must(x => x == null || x.Length <= applicationOutlineMaxSize)
             .When(x => x.Outline != null)
             .WithMessage($"The outline cannot exceed {applicationOutlineMaxSize} characters in length");
@@ -54,7 +53,8 @@ public sealed class DataApplicationValidator : AbstractValidator<ApplicationData
     {
         RuleFor(x => x.Activity)
             .NotEmpty()
-            .When(x => string.IsNullOrEmpty(x.Name) 
+            .When(x => 
+                string.IsNullOrEmpty(x.Name) 
                        && string.IsNullOrEmpty(x.Description) 
                        && string.IsNullOrEmpty(x.Outline))
             .WithMessage("You cannot create a request without specifying at least one additional field besides the user identifier");

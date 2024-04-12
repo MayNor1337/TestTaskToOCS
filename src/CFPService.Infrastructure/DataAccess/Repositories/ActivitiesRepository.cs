@@ -2,15 +2,20 @@
 using CFPService.Domain.Separated.Repositories;
 using Dapper;
 using Microsoft.Extensions.Options;
+using Npgsql;
 
 namespace CFPService.Infrastructure.DataAccess.Repositories;
 
-internal sealed class ActivitiesRepository : BaseRepository, IActivitiesRepository
+internal sealed class ActivitiesRepository : IActivitiesRepository
 {
-    public ActivitiesRepository(IOptionsSnapshot<DataAccessOptions> options) : base(options)
+    private readonly IOptionsSnapshot<DataAccessOptions> _options;
+
+    public ActivitiesRepository(IOptionsSnapshot<DataAccessOptions> options)
     {
+        _options = options;
     }
-    
+
+
     public async Task<IEnumerable<ActivityEntity>>
         GetActivities()
     {
@@ -25,4 +30,13 @@ FROM activities";
 
         return activities.ToArray();
     }
+
+    async Task<NpgsqlConnection> GetAndOpenConnection()
+    {
+        var connection = new NpgsqlConnection(_options.Value.ConnectionString);
+        await connection.OpenAsync();
+        await connection.ReloadTypesAsync();
+        return connection;
+    }
+    
 }

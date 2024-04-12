@@ -4,13 +4,17 @@ using CFPService.Domain.Separated.Repositories;
 using CFPService.Domain.Separated.Results;
 using Dapper;
 using Microsoft.Extensions.Options;
+using Npgsql;
 
 namespace CFPService.Infrastructure.DataAccess.Repositories;
 
-internal sealed class ApplicationRepository : BaseRepository, IApplicationRepository
+internal sealed class ApplicationRepository : IApplicationRepository
 {
-    public ApplicationRepository(IOptionsSnapshot<DataAccessOptions> options) : base(options)
+    private readonly IOptionsSnapshot<DataAccessOptions> _options;
+
+    public ApplicationRepository(IOptionsSnapshot<DataAccessOptions> options)
     {
+        _options = options;
     }
 
     public async Task<GetApplicationResult> InsertApplication(Guid authorId, ApplicationData applicationData)
@@ -174,4 +178,14 @@ WHERE status = 'draft' AND created_at < @UnsubmittedOlderDate";
     
         return applications.ToArray();
     }
+    
+    private async Task<NpgsqlConnection> GetAndOpenConnection()
+    {
+        var connection = new NpgsqlConnection(_options.Value.ConnectionString);
+        await connection.OpenAsync();
+        await connection.ReloadTypesAsync();
+        return connection;
+    }
+    
+    
 }
