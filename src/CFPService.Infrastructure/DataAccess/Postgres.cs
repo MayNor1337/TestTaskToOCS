@@ -1,4 +1,5 @@
-﻿using FluentMigrator.Runner;
+﻿using CFPService.Domain.Entity;
+using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -8,6 +9,7 @@ public static class Postgres
 {
     public static void MapCompositeTypes()
     {
+        // Dapper.CustomPropertyTypeMap;
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
     }
 

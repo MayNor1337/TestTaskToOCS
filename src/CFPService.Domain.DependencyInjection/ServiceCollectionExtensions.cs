@@ -17,11 +17,10 @@ public static class ServiceCollectionExtensions
             .AddScoped<IActivitiesService, ActivitiesService>()
             .AddScoped<IApplicationService, ApplicationService>()
             .AddScoped<IUserService, UserService>()
-            .AddOptions<IOptionsSnapshot<ApplicationOptions>>();
-            // .Configure<ApplicationOptions>(options =>
-            // {
-            //     config.GetSection(nameof(ApplicationOptions)).Bind(options);
-            // });
+            .Configure<ApplicationOptions>(options =>
+            {
+                config.GetSection(nameof(ApplicationOptions)).Bind(options);
+            });
         
         return services;
     }

@@ -3,17 +3,29 @@
 namespace CFPService.Domain.Entity;
 
 public record ApplicationEntity(
-    Guid? Id,
-    Guid? Author,
+    Guid Id,
+    Guid Author,
     string? Activity,
     string? Name,
     string? Description,
     string? Outline,
-    DateTime? CreatedAt,
-    Statuses? Status,
+    DateTime CreatedAt,
+    Statuses Status,
     DateTime? SubmittedDate
 )
 {
+    public ApplicationEntity(Guid authorId, ApplicationData applicationData) 
+        : this(Guid.NewGuid(),
+            authorId,
+            applicationData.Activity,
+            applicationData.Name,
+            applicationData.Description,
+            applicationData.Outline,
+            DateTime.Now,
+            Statuses.Draft,
+            null
+            ) { }
+    
     public ApplicationEntity UpdateData(ApplicationData data)
     {
         return this with
@@ -23,5 +35,15 @@ public record ApplicationEntity(
             Description = data.Description ?? Description, 
             Outline = data.Outline ?? Outline
         };
+    }
+
+    public ApplicationEntity SetSendStatus()
+    {
+        return this with { Status = Statuses.Sent, SubmittedDate = DateTime.Now};
+    }
+
+    public ApplicationData GetApplicationData()
+    {
+        return new ApplicationData(Activity, Name, Description, Outline);
     }
 }

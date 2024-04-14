@@ -1,5 +1,4 @@
 ﻿using CFPService.Api.Responses;
-using CFPService.Domain.Separated.Repositories;
 using CFPService.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

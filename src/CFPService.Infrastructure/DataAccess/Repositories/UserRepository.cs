@@ -28,16 +28,12 @@ WHERE author = @author_id AND status = 'draft'";
         };
         
         await using var connection = await GetAndOpenConnection();
-        var application = await connection.QueryAsync<ApplicationEntity>(
+        var application = await connection.QueryFirstOrDefaultAsync<ApplicationEntity>(
             new CommandDefinition(
                 sqlQuery,
-                sqlQueryParams));
-
-        var applicationEntities = application as ApplicationEntity[] ?? application.ToArray();
-        if (applicationEntities.Length is 0)
-            return null;
+                sqlQueryParams)); 
         
-        return applicationEntities.ToArray()[0];
+        return application;
     }
     
     async Task<NpgsqlConnection> GetAndOpenConnection()

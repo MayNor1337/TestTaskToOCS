@@ -3,7 +3,7 @@ using CFPService.Domain.Separated.Repositories;
 using FluentValidation;
 using Microsoft.Extensions.Options;
 
-namespace CFPService.Api.Validators;
+namespace CFPService.Api.Validators.ApplicationControllerValidators;
 
 public sealed class DataApplicationValidator : AbstractValidator<ApplicationData>
 {

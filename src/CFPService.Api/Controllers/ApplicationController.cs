@@ -1,7 +1,7 @@
 ﻿using CFPService.Api.ActionFilters;
 using CFPService.Api.Requests;
 using CFPService.Api.Responses;
-using CFPService.Api.ValidationModels;
+using CFPService.Api.ValidationModels.ApplicationControllerModels;
 using CFPService.Domain.Models;
 using CFPService.Domain.Services.Interfaces;
 using FluentValidation;
@@ -16,7 +16,7 @@ public class ApplicationController : ControllerBase
 {
     private readonly IApplicationService _applicationService;
     private readonly IValidator<CreateRequest> _createApplicationValidator;
-    private readonly IValidator<EditValidatonModel> _editApplicationValidator;
+    private readonly IValidator<EditModel> _editApplicationValidator;
     private readonly IValidator<GetApplicationByDateRequest> _getByDateValidator;
     private readonly IValidator<DeleteValidationModel> _deleteValidator;
     private readonly IValidator<GetApplicationByIdModel> _getByIdValidator;
@@ -25,7 +25,7 @@ public class ApplicationController : ControllerBase
     public ApplicationController(
         IApplicationService applicationService, 
         IValidator<CreateRequest> createApplicationValidator, 
-        IValidator<EditValidatonModel> editApplicationValidator, 
+        IValidator<EditModel> editApplicationValidator, 
         IValidator<GetApplicationByDateRequest> getByDateValidator, 
         IValidator<DeleteValidationModel> deleteValidator, IValidator<SubmitValidatonModel> submitValidator, IValidator<GetApplicationByIdModel> getByIdValidator)
     {
@@ -64,7 +64,7 @@ public class ApplicationController : ControllerBase
     [HttpPut("{applicationId}")]
     public async Task<ApplicationResponse> Edit(Guid applicationId, EditRequest request)
     {
-        await _editApplicationValidator.ValidateAndThrowAsync(new EditValidatonModel(applicationId, request));
+        await _editApplicationValidator.ValidateAndThrowAsync(new EditModel(applicationId, request));
 
         var applicationEntity = await _applicationService.EditApplication(
             applicationId,

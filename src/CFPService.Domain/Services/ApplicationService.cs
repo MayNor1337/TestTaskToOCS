@@ -18,7 +18,8 @@ internal sealed class ApplicationService : IApplicationService
 
     public async Task<ApplicationEntity> CreateApplication(Guid authorId, ApplicationData applicationData)
     {
-        GetApplicationResult result = await _applicationRepository.InsertApplication(authorId, applicationData);
+        var application = new ApplicationEntity(authorId, applicationData);
+        GetApplicationResult result = await _applicationRepository.InsertApplication(application);
 
         if (result is GetApplicationResult.ApplicationFound applicationFound)
             return applicationFound.Application;
@@ -32,13 +33,7 @@ internal sealed class ApplicationService : IApplicationService
         
         var resultApplication = currentApplication.UpdateData(newApplicationData);
         
-        GetApplicationResult finalResult = await _applicationRepository.UpdateApplication(applicationId, 
-            new ApplicationData(
-                resultApplication.Activity,
-                resultApplication.Name,
-                resultApplication.Description,
-                resultApplication.Outline
-                ));
+        GetApplicationResult finalResult = await _applicationRepository.UpdateApplication(resultApplication);
         
         if (finalResult is GetApplicationResult.ApplicationFound applicationFoundFinal)
             return applicationFoundFinal.Application;
@@ -53,7 +48,10 @@ internal sealed class ApplicationService : IApplicationService
 
     public async Task SubmitApplication(Guid applicationId)
     {
-        await _applicationRepository.SetSentStatus(applicationId);
+        var application = await GetApplication(applicationId);
+        application = application.SetSendStatus();
+        
+        await _applicationRepository.UpdateApplication(application);
     }
 
     public async Task<ApplicationEntity> GetApplication(Guid applicationId)

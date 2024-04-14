@@ -1,7 +1,8 @@
 ﻿using CFPService.Api.ValidationModels;
+using CFPService.Api.ValidationModels.ApplicationControllerModels;
 using FluentValidation;
 
-namespace CFPService.Api.Validators;
+namespace CFPService.Api.Validators.ApplicationControllerValidators;
 
 internal sealed class GetApplicationByDateValidator : AbstractValidator<GetApplicationByDateRequest>
 {

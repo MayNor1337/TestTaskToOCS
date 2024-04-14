@@ -1,5 +1,4 @@
 ﻿using CFPService.Domain.Entity;
-using CFPService.Domain.Models;
 using CFPService.Domain.Separated.Repositories;
 using CFPService.Domain.Separated.Results;
 using Dapper;
@@ -17,10 +16,10 @@ internal sealed class ApplicationRepository : IApplicationRepository
         _options = options;
     }
 
-    public async Task<GetApplicationResult> InsertApplication(Guid authorId, ApplicationData applicationData)
+    public async Task<GetApplicationResult> InsertApplication(ApplicationEntity application)
     {
         const string sqlQuery = @"
-INSERT INTO applications (id, author, activity, name, description, outline, created_at, status)
+INSERT INTO applications (id, author, activity, name, description, outline, created_at, status, submitted_date)
 VALUES
     (
         @applications_id, 
@@ -29,19 +28,22 @@ VALUES
         @name_value, 
         @description_value, 
         @outline_value, 
-        CURRENT_TIMESTAMP,
-        DEFAULT
+        @created_at,
+        @status::status_enum,
+        @submitted_date
     );
 ";
-        Guid id = Guid.NewGuid();
         var sqlQueryParams = new
         {
-            applications_id = id,
-            author = authorId,
-            activity = applicationData.Activity,
-            name_value = applicationData.Name,
-            description_value = applicationData.Description,
-            outline_value = applicationData.Outline
+            applications_id = application.Id,
+            author = application.Author,
+            activity = application.Activity,
+            name_value = application.Name,
+            description_value = application.Description,
+            outline_value = application.Outline,
+            created_at = application.CreatedAt,
+            status = application.Status.ToString().ToLower(),
+            submitted_date = application.SubmittedDate
         };
 
         await using var connection = await GetAndOpenConnection();
@@ -50,26 +52,36 @@ VALUES
                 sqlQuery,
                 sqlQueryParams));
 
-        return await GetApplication(id);
+        return await GetApplication(application.Id);
     }
 
-    public async Task<GetApplicationResult> UpdateApplication(Guid applicationId, ApplicationData applicationData)
+    public async Task<GetApplicationResult> UpdateApplication(ApplicationEntity application)
     {
         const string sqlQuery = @"
 UPDATE applications
-SET activity = (SELECT activity_id FROM activities WHERE activity = @activity), 
+SET id = @applications_id,
+    author = @author,
+    activity = (SELECT activity_id FROM activities WHERE activity = @activity), 
     name = @name_value, 
     description = @description_value, 
-    outline = @outline_value
+    outline = @outline_value,
+    status = @status_value::status_enum,
+    created_at = @created_at,
+    submitted_date = @submitted_date
 WHERE applications.id = @application_id";
 
         var sqlQueryParams = new
         {
-            activity = applicationData.Activity,
-            name_value = applicationData.Name,
-            description_value = applicationData.Description,
-            outline_value = applicationData.Outline,
-            application_id = applicationId
+            applications_id = application.Id,
+            author = application.Author,
+            activity = application.Activity,
+            name_value = application.Name,
+            description_value = application.Description,
+            outline_value = application.Outline,
+            status_value = application.Status.ToString().ToLower(),
+            application_id = application.Id,
+            created_at = application.CreatedAt,
+            submitted_date = application.SubmittedDate
         };
 
         await using var connection = await GetAndOpenConnection();
@@ -78,7 +90,7 @@ WHERE applications.id = @application_id";
                 sqlQuery,
                 sqlQueryParams));
 
-        return await GetApplication(applicationId);
+        return await GetApplication(application.Id);
     }
 
     public async Task SetSentStatus(Guid applicationId)
@@ -131,16 +143,15 @@ WHERE applications_view.id = @application_id";
         };
         
         await using var connection = await GetAndOpenConnection();
-        var applications = await connection.QueryAsync<ApplicationEntity>(
+        var application = await connection.QueryFirstOrDefaultAsync<ApplicationEntity>(
             new CommandDefinition(
                 sqlQuery,
                 sqlQueryParams));
         
-        var applicationEntities = applications as ApplicationEntity[] ?? applications.ToArray();
-        if (applicationEntities.Any() == false)
+        if (application is null)
             return new GetApplicationResult.ApplicationNotFound();
 
-        return new GetApplicationResult.ApplicationFound(applicationEntities.ToArray()[0]);
+        return new GetApplicationResult.ApplicationFound(application);
     }
 
     public async Task<IEnumerable<ApplicationEntity>> GetApplicationsByDateSubmittedAfterDate(DateTime submittedAfterDate)
@@ -186,6 +197,4 @@ WHERE status = 'draft' AND created_at < @UnsubmittedOlderDate";
         await connection.ReloadTypesAsync();
         return connection;
     }
-    
-    
 }

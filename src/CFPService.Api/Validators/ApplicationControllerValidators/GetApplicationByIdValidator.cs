@@ -1,9 +1,10 @@
 ﻿using CFPService.Api.ValidationModels;
+using CFPService.Api.ValidationModels.ApplicationControllerModels;
 using CFPService.Domain.Separated.Repositories;
 using CFPService.Domain.Separated.Results;
 using FluentValidation;
 
-namespace CFPService.Api.Validators;
+namespace CFPService.Api.Validators.ApplicationControllerValidators;
 
 public sealed class GetApplicationByIdValidator : AbstractValidator<GetApplicationByIdModel>
 {

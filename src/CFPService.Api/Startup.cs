@@ -2,8 +2,10 @@
 using CFPService.Api.ActionFilters;
 using CFPService.Api.Naming;
 using CFPService.Api.Requests;
-using CFPService.Api.ValidationModels;
-using CFPService.Api.Validators;
+using CFPService.Api.ValidationModels.ApplicationControllerModels;
+using CFPService.Api.ValidationModels.UsersControllerModels;
+using CFPService.Api.Validators.ApplicationControllerValidators;
+using CFPService.Api.Validators.UsersControllerValidators;
 using CFPService.Domain.DependencyInjection;
 using CFPService.Domain.Models;
 using CFPService.Infrastructure.Extensions;
@@ -33,7 +35,7 @@ public class Startup
             .AddControllers().Services
             .AddEndpointsApiExplorer()
             .AddSwaggerGen()
-            .AddHttpContextAccessor();
+            .AddHttpContextAccessor();;
 
         AddValidators(services);
     }
@@ -70,10 +72,11 @@ public class Startup
         services
             .AddScoped<IValidator<CreateRequest>, CreateApplicationValidator>()
             .AddScoped<IValidator<ApplicationData>, DataApplicationValidator>()
-            .AddScoped<IValidator<EditValidatonModel>, EditApplicationValidator>()
+            .AddScoped<IValidator<EditModel>, EditApplicationValidator>()
             .AddScoped<IValidator<GetApplicationByDateRequest>, GetApplicationByDateValidator>()
             .AddScoped<IValidator<DeleteValidationModel>, DeleteValidation>()
             .AddScoped<IValidator<SubmitValidatonModel>, SubmitValidator>()
-            .AddScoped<IValidator<GetApplicationByIdModel>, GetApplicationByIdValidator>();
+            .AddScoped<IValidator<GetApplicationByIdModel>, GetApplicationByIdValidator>()
+            .AddScoped<IValidator<GetApplicationByUserIdModel>, GetApplicationByUserIdValidator>();
     }
 }

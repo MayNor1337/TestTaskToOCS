@@ -6,7 +6,7 @@ public record GetApplicationResult
 {
     private GetApplicationResult() { }
 
-    public record ApplicationFound(ApplicationEntity Application) : GetApplicationResult;
+    public sealed record ApplicationFound(ApplicationEntity Application) : GetApplicationResult;
 
-    public record ApplicationNotFound : GetApplicationResult;
+    public sealed record ApplicationNotFound : GetApplicationResult;
 }
