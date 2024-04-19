@@ -1,8 +1,15 @@
 ﻿using System.Net;
 using CFPService.Api.ActionFilters;
 using CFPService.Api.Naming;
+using CFPService.Api.Requests;
+using CFPService.Api.ValidationModels.ApplicationControllerModels;
+using CFPService.Api.ValidationModels.UsersControllerModels;
+using CFPService.Api.Validators.ApplicationControllerValidators;
+using CFPService.Api.Validators.UsersControllerValidators;
 using CFPService.Domain.DependencyInjection;
+using CFPService.Domain.Models;
 using CFPService.Infrastructure.Extensions;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CFPService.Api;
@@ -28,7 +35,9 @@ public class Startup
             .AddControllers().Services
             .AddEndpointsApiExplorer()
             .AddSwaggerGen()
-            .AddHttpContextAccessor();
+            .AddHttpContextAccessor();;
+
+        AddValidators(services);
     }
 
     public void Configure(
@@ -56,5 +65,18 @@ public class Startup
         x.Filters.Add(new ResponseTypeAttribute((int)HttpStatusCode.InternalServerError));
         x.Filters.Add(new ResponseTypeAttribute((int)HttpStatusCode.BadRequest));
         x.Filters.Add(new ProducesResponseTypeAttribute((int)HttpStatusCode.OK));
+    }
+
+    void AddValidators(IServiceCollection services)
+    {
+        services
+            .AddScoped<IValidator<CreateRequest>, CreateApplicationValidator>()
+            .AddScoped<IValidator<ApplicationData>, DataApplicationValidator>()
+            .AddScoped<IValidator<EditModel>, EditApplicationValidator>()
+            .AddScoped<IValidator<GetApplicationByDateRequest>, GetApplicationByDateValidator>()
+            .AddScoped<IValidator<DeleteValidationModel>, DeleteValidation>()
+            .AddScoped<IValidator<SubmitValidatonModel>, SubmitValidator>()
+            .AddScoped<IValidator<GetApplicationByIdModel>, GetApplicationByIdValidator>()
+            .AddScoped<IValidator<GetApplicationByUserIdModel>, GetApplicationByUserIdValidator>();
     }
 }

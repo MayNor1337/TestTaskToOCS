@@ -1,6 +1,8 @@
 ﻿using CFPService.Domain.Models;
 using FluentMigrator;
 using Microsoft.Extensions.Options;
+using Microsoft.Identity.Client;
+using ApplicationOptions = CFPService.Domain.Models.ApplicationOptions;
 
 namespace CFPService.Infrastructure.DataAccess.Migrations;
 
